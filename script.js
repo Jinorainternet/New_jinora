@@ -509,16 +509,12 @@ document.getElementById("contactForm").addEventListener("submit", function(e) {
 
   fetch("https://script.google.com/macros/s/AKfycbzESkH8TKJcHQfHG27yEcTZACFJGWvqLa4rDW5Yb1KeDsevQgNnBS3AggW6Mdm0FVc_/exec", {
     method: "POST",
-    body: formData
+    body: formData,
+    mode: "no-cors"
   })
-  .then(response => response.json())
-  .then(data => {
-    if (data.status === "success") {
-      alert("Form submitted successfully ✅");
-      form.reset();
-    } else {
-      alert(data.message);
-    }
+  .then(() => {
+    alert("Form Submitted Successfully ✅");
+    form.reset();
   })
   .catch(error => {
     alert("Error: " + error);
