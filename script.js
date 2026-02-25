@@ -501,26 +501,32 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-fetch("https://script.google.com/macros/s/AKfycbxkZxR0HaikclMghhC9iI7RMtfCFp2H5Q5QmusAGSHyQwlPu1Qxi99nHhrks0FiPlJ7/exec", {
-  method: "POST",
-  mode: "no-cors",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    name: name,
-    email: email,
-    phone: phone,
-    message: message,
-    website: ""
+const form = document.getElementById("contactForm");
+
+form.addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const data = {
+    name: document.getElementById("name").value,
+    email: document.getElementById("email").value,
+    phone: document.getElementById("phone").value,
+    message: document.getElementById("message").value,
+    website: document.getElementById("website").value
+  };
+
+  fetch("https://script.google.com/macros/s/AKfycbyH9eulviQG9mPpDIZ_A0mTjbhE9CqAQCAeffB01gpzYbO3lcURr3EIz7A4aVVI83Mf/exec", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
   })
-})
-.then(res => res.json())
-.then(data => {
-  console.log(data);
-})
-.catch(error => {
-  console.error("Error:", error);
+  .then(res => res.json())
+  .then(result => {
+    alert(result.message);
+    form.reset();
+  })
+  .catch(error => console.error(error));
 });
 // ================================================================
 // ✅ UPDATE END: Products Section JS
