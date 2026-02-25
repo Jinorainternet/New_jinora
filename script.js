@@ -501,7 +501,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-fetch("https://script.google.com/macros/s/AKfycbz2AEQcNwC8aclJLNHU46i8AY5112xwVOWECaxucNDHegxs_hev5sA9veix7u3iEL6X/exec", {
+fetch("https://script.google.com/macros/s/AKfycbxkZxR0HaikclMghhC9iI7RMtfCFp2H5Q5QmusAGSHyQwlPu1Qxi99nHhrks0FiPlJ7/exec", {
   method: "POST",
   mode: "no-cors",
   headers: {
