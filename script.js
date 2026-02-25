@@ -501,26 +501,28 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-fetch("https://script.google.com/macros/s/AKfycbzkt4X2xSbchgBLCzMTfAUszCSD1vzO5AiIOSxqFpmZp38iEppJX_-dtRP9Nd9hbveJ/exec", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    name: document.getElementById("name").value,
-    email: document.getElementById("email").value,
-    phone: document.getElementById("phone").value,
-    message: document.getElementById("message").value,
-    website: document.getElementById("website").value
+document.getElementById("contactForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const form = document.getElementById("contactForm");
+  const formData = new FormData(form);
+
+  fetch("https://script.google.com/macros/s/AKfycby8LfHUh8y3y7BJl8JQPP7oWeOL9zpnrQwOqB6RUUk0zpgGLquz3jgoasb90gYnET52/exec", {
+    method: "POST",
+    body: formData
   })
-})
-.then(response => response.json())
-.then(data => {
-  alert(data.message);
-})
-.catch(error => {
-  console.error(error);
-  alert("Error submitting form");
+  .then(response => response.json())
+  .then(data => {
+    if (data.status === "success") {
+      alert("Form submitted successfully ✅");
+      form.reset();
+    } else {
+      alert(data.message);
+    }
+  })
+  .catch(error => {
+    alert("Error: " + error);
+  });
 });
 // ================================================================
 // ✅ UPDATE END: Products Section JS
