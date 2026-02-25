@@ -501,33 +501,54 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
+
+const scriptURL = "https://script.google.com/macros/s/AKfycbwAwtH1gMx165OdJSNTpaIB1Xs86TiwzhLecoaffH7bhRDKpPFpucxB9_TW5dX8-nFu/exec";
+
 const form = document.getElementById("contactForm");
+const submitBtn = form.querySelector(".form-submit");
 
-form.addEventListener("submit", function (e) {
-  e.preventDefault();
+form.addEventListener("submit", async function(e) {
+    e.preventDefault();
 
-  const data = {
-    name: document.getElementById("name").value,
-    email: document.getElementById("email").value,
-    phone: document.getElementById("phone").value,
-    message: document.getElementById("message").value,
-    website: document.getElementById("website").value
-  };
+    // Button loading state
+    submitBtn.disabled = true;
+    submitBtn.innerText = "Sending...";
 
-  fetch("https://script.google.com/macros/s/AKfycbyH9eulviQG9mPpDIZ_A0mTjbhE9CqAQCAeffB01gpzYbO3lcURr3EIz7A4aVVI83Mf/exec", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(data)
-  })
-  .then(res => res.json())
-  .then(result => {
-    alert(result.message);
-    form.reset();
-  })
-  .catch(error => console.error(error));
+    const formData = {
+        name: document.getElementById("name").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
+        message: document.getElementById("message").value.trim(),
+        website: document.getElementById("website").value // honeypot
+    };
+
+    try {
+        const response = await fetch(scriptURL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(formData)
+        });
+
+        const result = await response.json();
+
+        if (result.status === "success") {
+            alert("✅ Message sent successfully!");
+            form.reset();
+        } else {
+            alert("❌ " + result.message);
+        }
+
+    } catch (error) {
+        alert("⚠️ Something went wrong. Please try again.");
+    }
+
+    // Reset button
+    submitBtn.disabled = false;
+    submitBtn.innerText = "Send Message";
 });
+
 // ================================================================
 // ✅ UPDATE END: Products Section JS
 // ================================================================
