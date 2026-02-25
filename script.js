@@ -502,51 +502,60 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-const scriptURL = "https://script.google.com/macros/s/AKfycbwAwtH1gMx165OdJSNTpaIB1Xs86TiwzhLecoaffH7bhRDKpPFpucxB9_TW5dX8-nFu/exec";
+document.addEventListener("DOMContentLoaded", function () {
 
-const form = document.getElementById("contactForm");
-const submitBtn = form.querySelector(".form-submit");
+    const scriptURL = "https://script.google.com/macros/s/AKfycbwAwtH1gMx165OdJSNTpaIB1Xs86TiwzhLecoaffH7bhRDKpPFpucxB9_TW5dX8-nFu/exec";
 
-form.addEventListener("submit", async function(e) {
-    e.preventDefault();
+    const form = document.getElementById("contactForm");
 
-    // Button loading state
-    submitBtn.disabled = true;
-    submitBtn.innerText = "Sending...";
-
-    const formData = {
-        name: document.getElementById("name").value.trim(),
-        email: document.getElementById("email").value.trim(),
-        phone: document.getElementById("phone").value.trim(),
-        message: document.getElementById("message").value.trim(),
-        website: document.getElementById("website").value // honeypot
-    };
-
-    try {
-        const response = await fetch(scriptURL, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(formData)
-        });
-
-        const result = await response.json();
-
-        if (result.status === "success") {
-            alert("✅ Message sent successfully!");
-            form.reset();
-        } else {
-            alert("❌ " + result.message);
-        }
-
-    } catch (error) {
-        alert("⚠️ Something went wrong. Please try again.");
+    if (!form) {
+        console.error("Form not found");
+        return;
     }
 
-    // Reset button
-    submitBtn.disabled = false;
-    submitBtn.innerText = "Send Message";
+    const submitBtn = form.querySelector(".form-submit");
+
+    form.addEventListener("submit", async function(e) {
+        e.preventDefault();
+
+        submitBtn.disabled = true;
+        submitBtn.innerText = "Sending...";
+
+        const formData = {
+            name: document.getElementById("name").value.trim(),
+            email: document.getElementById("email").value.trim(),
+            phone: document.getElementById("phone").value.trim(),
+            message: document.getElementById("message").value.trim(),
+            website: document.getElementById("website").value
+        };
+
+        try {
+            const response = await fetch(scriptURL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const result = await response.json();
+
+            if (result.status === "success") {
+                alert("✅ Message sent successfully!");
+                form.reset();
+            } else {
+                alert("❌ " + result.message);
+            }
+
+        } catch (error) {
+            console.error(error);
+            alert("⚠️ Network error. Please try again.");
+        }
+
+        submitBtn.disabled = false;
+        submitBtn.innerText = "Send Message";
+    });
+
 });
 
 // ================================================================
