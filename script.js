@@ -501,62 +501,50 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-
 document.addEventListener("DOMContentLoaded", function () {
 
     const scriptURL = "https://script.google.com/macros/s/AKfycbwAwtH1gMx165OdJSNTpaIB1Xs86TiwzhLecoaffH7bhRDKpPFpucxB9_TW5dX8-nFu/exec";
 
     const form = document.getElementById("contactForm");
-
-    if (!form) {
-        console.error("Form not found");
-        return;
-    }
-
     const submitBtn = form.querySelector(".form-submit");
 
-    form.addEventListener("submit", async function(e) {
+    form.addEventListener("submit", function(e) {
         e.preventDefault();
 
         submitBtn.disabled = true;
         submitBtn.innerText = "Sending...";
 
-        const formData = {
-            name: document.getElementById("name").value.trim(),
-            email: document.getElementById("email").value.trim(),
-            phone: document.getElementById("phone").value.trim(),
-            message: document.getElementById("message").value.trim(),
-            website: document.getElementById("website").value
-        };
+        const formData = new FormData();
+        formData.append("name", document.getElementById("name").value.trim());
+        formData.append("email", document.getElementById("email").value.trim());
+        formData.append("phone", document.getElementById("phone").value.trim());
+        formData.append("message", document.getElementById("message").value.trim());
+        formData.append("website", document.getElementById("website").value); // honeypot
 
-        try {
-            const response = await fetch(scriptURL, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(formData)
-            });
+        fetch(scriptURL, {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.text())
+        .then(data => {
+            console.log("Server Response:", data);
 
-            const result = await response.json();
+            alert("✅ Message sent successfully!");
+            form.reset();
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("❌ Submission failed. Please try again.");
+        })
+        .finally(() => {
+            submitBtn.disabled = false;
+            submitBtn.innerText = "Send Message";
+        });
 
-            if (result.status === "success") {
-                alert("✅ Message sent successfully!");
-                form.reset();
-            } else {
-                alert("❌ " + result.message);
-            }
-
-        } catch (error) {
-            console.error(error);
-            alert("⚠️ Network error. Please try again.");
-        }
-
-        submitBtn.disabled = false;
-        submitBtn.innerText = "Send Message";
     });
 
 });
+
 
 // ================================================================
 // ✅ UPDATE END: Products Section JS
