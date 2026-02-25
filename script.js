@@ -501,24 +501,26 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-document.getElementById("contactForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-
-  const form = document.getElementById("contactForm");
-  const formData = new FormData(form);
-
-  fetch("https://script.google.com/macros/s/AKfycbz2AEQcNwC8aclJLNHU46i8AY5112xwVOWECaxucNDHegxs_hev5sA9veix7u3iEL6X/exec", {
-    method: "POST",
-    body: formData,
-    mode: "no-cors"
+fetch("https://script.google.com/macros/s/AKfycbz2AEQcNwC8aclJLNHU46i8AY5112xwVOWECaxucNDHegxs_hev5sA9veix7u3iEL6X/exec", {
+  method: "POST",
+  mode: "no-cors",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    name: name,
+    email: email,
+    phone: phone,
+    message: message,
+    website: ""
   })
-  .then(() => {
-    alert("Form Submitted Successfully ✅");
-    form.reset();
-  })
-  .catch(error => {
-    alert("Error: " + error);
-  });
+})
+.then(res => res.json())
+.then(data => {
+  console.log(data);
+})
+.catch(error => {
+  console.error("Error:", error);
 });
 // ================================================================
 // ✅ UPDATE END: Products Section JS
