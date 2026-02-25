@@ -507,7 +507,7 @@ document.getElementById("contactForm").addEventListener("submit", function(e) {
   const form = document.getElementById("contactForm");
   const formData = new FormData(form);
 
-  fetch("https://script.google.com/macros/s/AKfycby8LfHUh8y3y7BJl8JQPP7oWeOL9zpnrQwOqB6RUUk0zpgGLquz3jgoasb90gYnET52/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbzESkH8TKJcHQfHG27yEcTZACFJGWvqLa4rDW5Yb1KeDsevQgNnBS3AggW6Mdm0FVc_/exec", {
     method: "POST",
     body: formData
   })
